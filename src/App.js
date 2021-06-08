@@ -1,25 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from "react";
 
-function App() {
+const App = () => {
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
+
+  useEffect(() => {
+    console.log("loading has changed")
+  }, [loading])
+
+  const handleFetch = async () => {
+    const response = await fetch("https://api.chucknorris.io/jokes/random")
+    const data = await response.json()
+    setData(data);
+    
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Chuck Norris Quote Machine</h1>
+      <button onClick={handleFetch}>handleFetch</button>
+      <button onClick={() => setLoading(!loading)}>change loading</button>
+      {data.value && (
+        <>
+          <h2>Joke:</h2>
+          <p>{data.value}</p>
+        </>
+        )}
     </div>
   );
 }
-
 export default App;
